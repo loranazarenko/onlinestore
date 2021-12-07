@@ -4,7 +4,6 @@ import com.epam.onlinestore.Path;
 import com.epam.onlinestore.dao.impl.AccountDAOImpl;
 import com.epam.onlinestore.dao.impl.RoleDAOImpl;
 import com.epam.onlinestore.entity.Account;
-import com.epam.onlinestore.exception.ConnectionException;
 import com.epam.onlinestore.exception.DaoException;
 import org.apache.log4j.Logger;
 
@@ -13,13 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Objects;
 
-/**
- * Login command.
- *
- * @author D.Kolesnikov
- */
 public class LoginCommand extends Command {
 
     private static final long serialVersionUID = -3071536593627692473L;
@@ -42,47 +37,43 @@ public class LoginCommand extends Command {
 
         // error handler
         String errorMessage = null;
-        String forward = Path.PAGE__ERROR_PAGE;
-        String address = "error_page.jsp";
+        String forward = Path.PAGE__ENTER;
 
         if (login == null || password == null || login.isEmpty() || password.isEmpty()) {
             errorMessage = "Login/password cannot be empty";
             request.setAttribute("errorMessage", errorMessage);
             log.error("errorMessage --> " + errorMessage);
-           return forward;
-            //return "index.jsp";
+            return forward;
         }
 
         Account user = new AccountDAOImpl().getByLogin(login);
         log.trace("Found in DB: user --> " + user);
 
-        if (user == null || !password.equals(user.getPassword())) {
-            errorMessage = "Cannot find user with such login/password";
+        if (user == null || !password.equals(user.getPassword())||user.getUserStatuses()==2) {
+            errorMessage = "Cannot find user with such login/password or you are blocked";
             request.setAttribute("errorMessage", errorMessage);
             log.error("errorMessage --> " + errorMessage);
-          return forward;
+            return forward;
         } else {
             String userRole = null;
             try {
                 userRole = new RoleDAOImpl().findById(user.getRoleId());
-            } catch (ConnectionException e) {
+            } catch (SQLException e) {
                 log.error(e);
             }
             log.trace("userRole --> " + userRole);
-
-            if (Objects.equals(userRole, "ADMIN"))
-              // 	forward = Path.COMMAND__LIST_ORDERS;
-                return "admin.jsp";
-                if (Objects.equals(userRole, "CLIENT"))
-              //   	forward = Path.COMMAND__LIST_MENU;
-                    return "user.jsp";
-                    session.setAttribute("user", user);
+            session.setAttribute("user", user);
             log.trace("Set the session attribute: user --> " + user);
-
-            session.setAttribute("userRole", userRole);
+            session.setAttribute("role", userRole);
             log.trace("Set the session attribute: userRole --> " + userRole);
+            log.info("User " + user + " logged as " + (userRole != null ? userRole.toLowerCase() : null));
 
-            log.info("User " + user + " logged as " + userRole.toString().toLowerCase());
+            if (Objects.equals(userRole, "admin")) {
+                return Path.PAGE__ADMIN;
+            }
+            if (Objects.equals(userRole, "user")) {
+                return Path.PAGE__USER;
+            }
         }
 
         log.debug("Command finished");

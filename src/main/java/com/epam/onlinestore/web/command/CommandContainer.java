@@ -12,19 +12,22 @@ public class CommandContainer {
     private static final Map<String, Command> commandsMap = new HashMap<>();
 
     static {
-        commandsMap.put("logup", new LogupCommand());
+        commandsMap.put("signup", new SignUpCommand());
         commandsMap.put("login", new LoginCommand());
         commandsMap.put("logout", new LogoutCommand());
-      /*   commandsMap.put("catalog", new CommandCatalog());
-        commandsMap.put("cart", new CommandCart());
-        commandsMap.put("signup", new CommandSingUp());
-        commandsMap.put("ajax", new CommandAJAX());
-        commandsMap.put("addorder", new CommandAddOrder());
-        commandsMap.put("orders", new CommandOrders());
-        commandsMap.put("locale",new CommandLocale());
-        commandsMap.put("users",new CommandUsers());
-        commandsMap.put("admincatalog",new CommandAdminCatalog());
-        commandsMap.put("getalluserorders",new CommandAdminUserOrders());*/
+        commandsMap.put("catalog", new CatalogCommand());
+        commandsMap.put("addToBasket", new AddCartCommand());
+        commandsMap.put("editProduct", new EditProductCommand());
+        commandsMap.put("confirmEditProduct", new ConfirmEditProduct());
+        commandsMap.put("addProduct", new AddProduct());
+        commandsMap.put("confirmAddProduct", new ConfirmAddProduct());
+        commandsMap.put("deleteProducts", new DeleteProducts());
+        commandsMap.put("pageCart", new PageCartCommand());
+        commandsMap.put("userOrders", new UserOrdersCommand());
+        commandsMap.put("makeOrder", new MakeReceiptCommand());
+        commandsMap.put("adminUserOrders", new AdminUserOrdersCommand());
+        commandsMap.put("adminUsers", new CommandUsers());
+        commandsMap.put("incDec", new QuantityIncDec());
     }
 
     public static Command getCommand(String commandName) {

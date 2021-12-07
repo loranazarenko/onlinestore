@@ -3,6 +3,21 @@
          xmlns="http://xmlns.jcp.org/xml/ns/javaee"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+    <request-character-encoding>cp1251</request-character-encoding>
+
+    <filter>
+        <filter-name>SelectLanguageFilter</filter-name>
+        <filter-class>com.epam.onlinestore.web.filter.SelectLanguageFilter</filter-class>
+        <init-param>
+            <param-name>requestEncoding</param-name>
+            <param-value>cp1251</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>SelectLanguageFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <resource-ref>
         <description>DB Connection</description>
@@ -17,9 +32,10 @@
         <welcome-file>/index.jsp</welcome-file>
     </welcome-file-list>
 
+
     <!--=============================================================-->
     <listener>
-        <listener-class>com.epam.onlinestore.web.listener.SessionStartListener</listener-class>
+        <listener-class>com.epam.onlinestore.web.listener.ContextListener</listener-class>
     </listener>
 
 
@@ -38,76 +54,76 @@
 
 </web-app>
 
-    <!--============================================================
-    Controller
-     =============================================================
-    <servlet>
-        <servlet-name>Controller</servlet-name>
-        <servlet-class>com.epam.onlinestore.Controller</servlet-class>
-    </servlet>
+        <!--============================================================
+        Controller
+         =============================================================
+        <servlet>
+            <servlet-name>Controller</servlet-name>
+            <servlet-class>com.epam.onlinestore.Controller</servlet-class>
+        </servlet>
 
-    <servlet-mapping>
-        <servlet-name>Controller</servlet-name>
-        <url-pattern>/controller</url-pattern>
-    </servlet-mapping>-->
-
-
-    <!--============================================================
-        Encoding support filter
-    =============================================================
-    <filter>
-        <filter-name>EncodingFilter</filter-name>
-        <filter-class>com.epam.onlinestore.web.filter.EncodingFilter</filter-class>
-        <init-param>
-            <param-name>encoding</param-name>
-            <param-value>UTF-8</param-value>
-        </init-param>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>EncodingFilter</filter-name>
-        <url-pattern>/WEB-INF/jsp/*</url-pattern>
-        <servlet-name>Controller</servlet-name>
-    </filter-mapping>-->
+        <servlet-mapping>
+            <servlet-name>Controller</servlet-name>
+            <url-pattern>/controller</url-pattern>
+        </servlet-mapping>-->
 
 
-    <!--============================================================
-        Security filter.
-        1) admin: admin commands
-        2) client: client commands
-        3) commons: commands for all roles
-        4) out-of-control: commands without access control
-        Delimiter - space/tab
-    =============================================================-->
-    <!--
+        <!--============================================================
+            Encoding support filter
+        =============================================================
         <filter>
-            <filter-name>CommandAccessFilter</filter-name>
-            <filter-class>ua.kharkov.knure.dkolesnikov.st4example.web.filter.CommandAccessFilter</filter-class>
+            <filter-name>EncodingFilter</filter-name>
+            <filter-class>com.epam.onlinestore.web.filter.EncodingFilter</filter-class>
             <init-param>
-                <param-name>admin</param-name>
-                <param-value>listOrders</param-value>
-            </init-param>
-            <init-param>
-                <param-name>client</param-name>
-                <param-value>listMenu</param-value>
-            </init-param>
-            <init-param>
-                <param-name>common</param-name>
-                <param-value>logout noCommand viewSettings updateSettings</param-value>
-            </init-param>
-            <init-param>
-                <param-name>out-of-control</param-name>
-                <param-value>login</param-value>
+                <param-name>encoding</param-name>
+                <param-value>UTF-8</param-value>
             </init-param>
         </filter>
 
         <filter-mapping>
-            <filter-name>CommandAccessFilter</filter-name>
+            <filter-name>EncodingFilter</filter-name>
+            <url-pattern>/WEB-INF/jsp/*</url-pattern>
             <servlet-name>Controller</servlet-name>
-        </filter-mapping>
-    -->
+        </filter-mapping>-->
 
 
-    <!--============================================================
-        Context listener
-      <listener-class>com.epam.onlinestore.web.listener.ContextListener</listener-class>-->
+        <!--============================================================
+            Security filter.
+            1) admin: admin commands
+            2) client: client commands
+            3) commons: commands for all roles
+            4) out-of-control: commands without access control
+            Delimiter - space/tab
+        =============================================================-->
+        <!--
+            <filter>
+                <filter-name>CommandAccessFilter</filter-name>
+                <filter-class>ua.kharkov.knure.dkolesnikov.st4example.web.filter.CommandAccessFilter</filter-class>
+                <init-param>
+                    <param-name>admin</param-name>
+                    <param-value>listOrders</param-value>
+                </init-param>
+                <init-param>
+                    <param-name>client</param-name>
+                    <param-value>listMenu</param-value>
+                </init-param>
+                <init-param>
+                    <param-name>common</param-name>
+                    <param-value>logout noCommand viewSettings updateSettings</param-value>
+                </init-param>
+                <init-param>
+                    <param-name>out-of-control</param-name>
+                    <param-value>login</param-value>
+                </init-param>
+            </filter>
+
+            <filter-mapping>
+                <filter-name>CommandAccessFilter</filter-name>
+                <servlet-name>Controller</servlet-name>
+            </filter-mapping>
+        -->
+
+
+        <!--============================================================
+            Context listener
+          <listener-class>com.epam.onlinestore.web.listener.ContextListener</listener-class>-->

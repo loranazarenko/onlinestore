@@ -12,16 +12,15 @@ public class Product implements Serializable {
     private Date create_date;
     private long categoryId;
     private String color;
-    private int size;
     private String picture;
     private int count;
+    boolean is_deleted;
 
     public Product() {
     }
 
     public Product(long id, String name, String description, double price,
-                   Date create_date, long categoryId, String color,
-                   int size) {
+                   Date create_date, long categoryId, String color, String picture, int count, boolean is_deleted) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -29,7 +28,9 @@ public class Product implements Serializable {
         this.create_date = create_date;
         this.categoryId = categoryId;
         this.color = color;
-        this.size = size;
+        this.picture = picture;
+        this.count = count;
+        this.is_deleted = is_deleted;
     }
 
     public Product(int id, String name, int price) {
@@ -43,6 +44,14 @@ public class Product implements Serializable {
         this.name = name;
         this.price = price;
         this.picture = picture;
+    }
+
+    public boolean getIs_deleted() {
+        return is_deleted;
+    }
+
+    public void setIs_deleted(boolean is_deleted) {
+        this.is_deleted = is_deleted;
     }
 
     public String getPicture() {
@@ -117,14 +126,6 @@ public class Product implements Serializable {
         this.color = color;
     }
 
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -137,8 +138,7 @@ public class Product implements Serializable {
                 name.equals(product.name) &&
                 Objects.equals(description, product.description) &&
                 price == product.price &&
-                Objects.equals(color, product.color) &&
-                size == product.size;
+                Objects.equals(color, product.color);
     }
 
     @Override
@@ -151,7 +151,6 @@ public class Product implements Serializable {
         result = prime * result + ((description == null) ? 0 : description.hashCode());
         result = prime * result + (int) price;
         result = prime * result + color.hashCode();
-        result = (int) (prime * result + size);
         return result;
     }
 
@@ -163,7 +162,6 @@ public class Product implements Serializable {
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 ", color=" + color +
-                ", size=" + size +
                 '}';
     }
 }

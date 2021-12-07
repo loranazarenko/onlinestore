@@ -6,11 +6,13 @@ public class Account {
     private String password;
     private int roleId;
     private long accountDetailId;
+    private int statusId;
 
-    public Account(long id, String login, String password) {
+    public Account(long id, String login, String password, int statusId) {
         this.id = id;
         this.login = login;
         this.password = password;
+        this.statusId = statusId;
     }
 
     public Account() {
@@ -56,13 +58,23 @@ public class Account {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return "User{" + "user id=" + getId() +
-                "login='" + login + '\'' +
-                ", roleId=" + roleId +
-                '}';
+    public int getUserStatuses() {
+        return statusId;
     }
 
+    public void setUserStatuses(int statusId) {
+        this.statusId = statusId;
+    }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", roleId=" + roleId +
+                ", accountDetailId=" + accountDetailId +
+                ", statusId=" + statusId +
+                '}';
+    }
 }

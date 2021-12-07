@@ -11,11 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * Update settings items.
- *
- * @author D.Kolesnikov
- */
 public class UpdateSettingsCommand extends Command {
 
     private static final long serialVersionUID = 7732286214029478505L;
@@ -34,27 +29,12 @@ public class UpdateSettingsCommand extends Command {
         boolean updateUser = false;
 
         // update first name
-        String firstName = request.getParameter("firstName");
-        if (firstName != null && !firstName.isEmpty()) {
-            account.setLogin(firstName);
+        String name = request.getParameter("name");
+        if (name != null && !name.isEmpty()) {
+            account.setLogin(name);
             updateUser = true;
         }
 
-        // update last name
-	/*	String lastName = request.getParameter("lastName");
-		if (lastName != null && !lastName.isEmpty()) {
-			user.setLastName(lastName);
-			updateUser = true;
-		}
-
-		String localeToSet = request.getParameter("localeToSet");
-		if (localeToSet != null && !localeToSet.isEmpty()) {
-			HttpSession session = request.getSession();
-			Config.set(session, "javax.servlet.jsp.jstl.fmt.locale", localeToSet);			
-			session.setAttribute("defaultLocale", localeToSet);
-			user.setLocaleName(localeToSet);
-			updateUser = true;
-		}*/
 
         if (updateUser == true) {
             try {
@@ -63,7 +43,6 @@ public class UpdateSettingsCommand extends Command {
                 e.printStackTrace();
             }
         }
-
 
         log.debug("Command finished");
         return Path.PAGE__SETTINGS;

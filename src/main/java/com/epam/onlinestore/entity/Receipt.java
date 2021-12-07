@@ -1,23 +1,40 @@
 package com.epam.onlinestore.entity;
 
-import java.time.OffsetDateTime;
 import java.util.Objects;
 
 public class Receipt {
 
     private long id;
     private String description;
-    private long total;
-    private OffsetDateTime create_date;
+    private double total;
+    private long statusId;
+    private long accountId;
+
+    public long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(long accountId) {
+        this.accountId = accountId;
+    }
+
+    public long getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(long statusId) {
+        this.statusId = statusId;
+    }
 
     public Receipt() {
     }
 
-    public Receipt(long id, String description, long total, OffsetDateTime create_date) {
+    public Receipt(long id, String description, double total, long statusId, long accountId) {
         this.id = id;
         this.description = description;
         this.total = total;
-        this.create_date = create_date;
+        this.statusId = statusId;
+        this.accountId = accountId;
     }
 
     public long getId() {
@@ -36,20 +53,12 @@ public class Receipt {
         this.description = description;
     }
 
-    public long getTotal() {
+    public double getTotal() {
         return total;
     }
 
-    public void setTotal(long total) {
+    public void setTotal(double total) {
         this.total = total;
-    }
-
-    public OffsetDateTime getCreate_date() {
-        return create_date;
-    }
-
-    public void setCreate_date(OffsetDateTime create_date) {
-        this.create_date = create_date;
     }
 
     @Override
@@ -58,13 +67,12 @@ public class Receipt {
         if (!(o instanceof Receipt)) return false;
         Receipt receipt = (Receipt) o;
         return getId() == receipt.getId() && getTotal() == receipt.getTotal()
-                && Objects.equals(getDescription(), receipt.getDescription())
-                && Objects.equals(getCreate_date(), receipt.getCreate_date());
+                && Objects.equals(getDescription(), receipt.getDescription());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getDescription(), getTotal(), getCreate_date());
+        return Objects.hash(getId(), getDescription(), getTotal());
     }
 
     @Override
@@ -73,7 +81,6 @@ public class Receipt {
                 "id=" + id +
                 ", description='" + description + '\'' +
                 ", total=" + total +
-                ", create_date=" + create_date +
                 '}';
     }
 }

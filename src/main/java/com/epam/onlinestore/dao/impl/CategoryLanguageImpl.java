@@ -7,7 +7,7 @@ import com.epam.onlinestore.web.command.LoginCommand;
 import org.apache.log4j.Logger;
 
 public class CategoryLanguageImpl implements CategoryLanguageDAO {
-    private static final Logger log = Logger.getLogger(LoginCommand.class);
+    private static final Logger log = Logger.getLogger(CategoryLanguageImpl.class);
     @Override
     public void setTranslationForCategory(Category category, Language language, String name) {
 

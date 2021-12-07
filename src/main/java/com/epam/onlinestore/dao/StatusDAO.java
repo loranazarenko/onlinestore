@@ -1,12 +1,12 @@
 package com.epam.onlinestore.dao;
 
-import com.epam.onlinestore.entity.Status;
 import com.epam.onlinestore.exception.DaoException;
 
-import java.util.Optional;
+import java.sql.SQLException;
 
 public interface StatusDAO {
 
-    Optional<Status> findByName(String name) throws DaoException;
+    long getStatusIdByName(String name) throws DaoException, SQLException;
 
+    String getStatusNameById(long id) throws DaoException, SQLException;
 }

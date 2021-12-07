@@ -1,43 +1,16 @@
 package com.epam.onlinestore.web.listener;
 
-import com.epam.onlinestore.entity.Product;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.apache.log4j.xml.DOMConfigurator;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.http.HttpSessionEvent;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-/**
- * Context listener.
- *
- * @author D.Kolesnikov
- */
 public class ContextListener implements ServletContextListener {
 
     private static final Logger log = Logger.getLogger(ContextListener.class);
-
-    private static String contextPath;
-    private static Map<Integer, String> orderStatuses;
-
-    static {
-        orderStatuses = new HashMap<>();
-        orderStatuses.put(1, "Registered");
-        orderStatuses.put(2, "Paid");
-        orderStatuses.put(3, "Canceled");
-    }
-
-    public static String getContextPath() {
-        return contextPath;
-    }
-
-    public void setContextPath(String contextPath) {
-        this.contextPath = contextPath;
-    }
 
     public void contextDestroyed(ServletContextEvent event) {
         log("Servlet context destruction starts");
@@ -58,15 +31,14 @@ public class ContextListener implements ServletContextListener {
     /**
      * Initializes log4j framework.
      *
-     * @param servletContext
+     * @param servletContext ServletContext
      */
     private void initLog4J(ServletContext servletContext) {
         log("Log4J initialization started");
         try {
-            PropertyConfigurator.configure(servletContext.getRealPath(
-                    "WEB-INF/log4j.xml"));
+           PropertyConfigurator.configure(servletContext.getRealPath("/WEB-INF/log4j.properties"));
         } catch (Exception ex) {
-            ex.printStackTrace();
+           System.out.println(ex.getMessage());
         }
 
         log("Log4J initialization finished");
@@ -75,7 +47,6 @@ public class ContextListener implements ServletContextListener {
     /**
      * Initializes CommandContainer.
      *
-     * @param //servletContext
      */
     private void initCommandContainer() {
         log.debug("Command container initialization started");

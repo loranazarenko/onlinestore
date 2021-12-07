@@ -1,5 +1,6 @@
 package com.epam.onlinestore.dao;
 
+import com.epam.onlinestore.entity.Language;
 import com.epam.onlinestore.entity.Product;
 import com.epam.onlinestore.exception.DaoException;
 
@@ -16,7 +17,7 @@ public interface ProductDAO {
      * @return A list of all products from the database ordered by product ID.
      * @throws DaoException If something fails at database level.
      */
-    List<Product> findAll() throws DaoException;
+    List<Product> findAll(int offset, int limit) throws DaoException;
 
     /**
      * Method to find product by category in database
@@ -51,7 +52,7 @@ public interface ProductDAO {
      * @param item product object to save
      * @throws DaoException If something fails at database level.
      */
-    long save(Product item) throws DaoException;
+    Product save(Product item) throws DaoException;
 
     /**
      * Method to get product by name from database
@@ -62,5 +63,6 @@ public interface ProductDAO {
      */
     List<Product> getProductsById(List<Long> listId);
 
+    List<Product> getAllProductsWithLang(Language language);
 
 }

@@ -8,8 +8,10 @@ import java.util.Map;
 
 public interface ReceiptLineDAO {
 
-    public void setProductsForReceipt(Receipt receipt, Map<Integer, Product> map);
+    void setProductsForReceipt(Receipt receipt, Map<Integer, Product> map);
 
-    public List<Product> getReceiptProductsWithAmount(Receipt receipt);
+    List<Product> getReceiptProductsWithAmount(Receipt receipt);
+
+    void insertReceiptWithLine(long receiptId, Map<Product, Integer> mapProductsWithCount);
 
 }

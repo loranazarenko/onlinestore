@@ -5,20 +5,18 @@ import java.util.Objects;
 public class AccountDetail {
 
     private long id;
-    private int accountId;
+    private long accountId;
     private String name;
     private String email;
-    private int phone;
 
     public AccountDetail() {
     }
 
-    public AccountDetail(long id, int accountId, String name, String email, int phone) {
+    public AccountDetail(long id, long accountId, String name, String email) {
         this.id = id;
         this.accountId = accountId;
         this.name = name;
         this.email = email;
-        this.phone = phone;
     }
 
     public long getId() {
@@ -33,7 +31,7 @@ public class AccountDetail {
         return accountId;
     }
 
-    public void setAccountId(int accountId) {
+    public void setAccountId(long accountId) {
         this.accountId = accountId;
     }
 
@@ -53,34 +51,25 @@ public class AccountDetail {
         this.email = email;
     }
 
-    public int getPhone() {
-        return phone;
-    }
-
-    public void setPhone(int phone) {
-        this.phone = phone;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AccountDetail)) return false;
         AccountDetail that = (AccountDetail) o;
-        return getAccountId() == that.getAccountId() && getPhone() == that.getPhone() && Objects.equals(getName(), that.getName()) && Objects.equals(getEmail(), that.getEmail());
+        return getAccountId() == that.getAccountId() && Objects.equals(getName(), that.getName()) && Objects.equals(getEmail(), that.getEmail());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getAccountId(), getName(), getEmail(), getPhone());
+        return Objects.hash(getAccountId(), getName(), getEmail());
     }
 
     @Override
     public String toString() {
         return "AccountDetail{" +
-                "id=" + accountId +
+                "accountId=" + accountId +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", phone=" + phone +
                 '}';
     }
 }

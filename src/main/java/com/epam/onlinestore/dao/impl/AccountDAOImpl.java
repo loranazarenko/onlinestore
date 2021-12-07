@@ -4,8 +4,8 @@ import com.epam.onlinestore.dao.AccountDAO;
 import com.epam.onlinestore.dao.EntityMapper;
 import com.epam.onlinestore.dao.Fields;
 import com.epam.onlinestore.dao.connection.DBManager;
+import com.epam.onlinestore.dao.connection.DbConst;
 import com.epam.onlinestore.entity.Account;
-import com.epam.onlinestore.exception.ConnectionException;
 import com.epam.onlinestore.exception.DaoException;
 import com.epam.onlinestore.web.command.LoginCommand;
 import org.apache.log4j.Logger;
@@ -17,20 +17,14 @@ import java.util.Optional;
 
 public class AccountDAOImpl implements AccountDAO {
     private static final Logger log = Logger.getLogger(LoginCommand.class);
-//,account_detail_id,?
-    private static final String INSERT_ACCOUNT = "insert into account (login, password, role_id) values (?,?,?)";
-    private static final String GET_ALL_USERS = "SELECT * FROM account ORDER BY id;";
-    private static final String FIND_USER_BY_ID = "select * from account where id=?";
-    private static final String FIND_USER_BY_LOGIN = "select * from account where login=?";
-
 
     @Override
-    public boolean createAccount(String login, String password, long role_id) throws DaoException, ConnectionException {
+    public Account createAccount(String login, String password, long role_id) throws SQLException {
         Connection connection = DBManager.getConnection();
         ResultSet keys;
-        boolean result = false;
+        Account account = new Account();
         try {
-            PreparedStatement pstm = connection.prepareStatement(INSERT_ACCOUNT, PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement pstm = connection.prepareStatement(DbConst.INSERT_ACCOUNT, PreparedStatement.RETURN_GENERATED_KEYS);
             int i = 0;
             pstm.setString(++i, escapeForInjection(login));
             pstm.setString(++i, escapeForInjection(password));
@@ -39,38 +33,60 @@ public class AccountDAOImpl implements AccountDAO {
                 keys = pstm.getGeneratedKeys();
                 if (keys.next()) {
                     int id = keys.getInt(1);
-                    Account account = new Account();
                     account.setId(id);
                     account.setLogin(login);
                     account.setPassword(password);
                 }
             }
             connection.commit();
-            result = true;
         } catch (SQLException e) {
             log.error("Cant insert user to Database, try later", e);
-       //     throw new DaoException("Cant insert user to Database, try later", e);
         }
-        return result;
+        return account;
     }
 
     @Override
-    public List<Account> getAll() throws DaoException {
+    public boolean block(long account_id) throws SQLException {
+        Connection connection = DBManager.getConnection();
+        boolean flag = false;
+        try {
+            PreparedStatement statement = connection.prepareStatement(DbConst.BLOCK_USER);
+            statement.setLong(1, account_id);
+            flag = statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            log.error("Blocking user error", e);
+        }
+        return flag;
+    }
+
+    @Override
+    public boolean unblock(long account_id) throws SQLException {
+        Connection connection = DBManager.getConnection();
+        boolean flag = false;
+        try {
+            PreparedStatement statement = connection.prepareStatement(DbConst.UNBLOCK_USER);
+            statement.setLong(1, account_id);
+            flag = statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            log.error("Unblocking user error", e);
+        }
+        return flag;
+    }
+
+    @Override
+    public List<Account> getAll() throws SQLException {
         ArrayList<Account> accounts = new ArrayList<>();
         Connection connection = DBManager.getConnection();
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(GET_ALL_USERS);
+            ResultSet resultSet = statement.executeQuery(DbConst.GET_ALL_USERS);
+            AccountMapper mapper = new AccountMapper();
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String login = resultSet.getString("login");
-                String password = resultSet.getString("password");
-                Account account = new Account(id, login, password);
+                Account account = mapper.mapRow(resultSet);
                 accounts.add(account);
             }
         } catch (Exception ex) {
             log.error("Unable to find all accounts!", ex);
-           // throw new DaoException(ex.getMessage(), ex);
         }
         return accounts;
     }
@@ -85,7 +101,7 @@ public class AccountDAOImpl implements AccountDAO {
         try {
             log.error("In getByLogin");
             connection = DBManager.getConnection();
-            pstm = connection.prepareStatement(FIND_USER_BY_LOGIN);
+            pstm = connection.prepareStatement(DbConst.FIND_USER_BY_LOGIN);
             pstm.setString(1, login);
             rs = pstm.executeQuery();
             AccountMapper mapper = new AccountMapper();
@@ -94,7 +110,7 @@ public class AccountDAOImpl implements AccountDAO {
             }
             connection.commit();
         } catch (SQLException e) {
-          //  throw new DaoException("Cant get user from Database, try later", e);
+            ;
             log.error("Cant get user from Database, try later");
         }
         return user;
@@ -108,7 +124,43 @@ public class AccountDAOImpl implements AccountDAO {
 
     @Override
     public Optional<Account> updateAccount(Account account) throws DaoException {
-        return Optional.empty();
+        Connection con;
+        PreparedStatement pstm;
+        log.error("Username: " + account.getLogin() + " AccountDetailId: " + account.getAccountDetailId());
+        try {
+            con = DBManager.getConnection();
+            pstm = con.prepareStatement(DbConst.UPDATE_ACCOUNT);
+    //        pstm.setLong(1, account.getAccountDetailId());
+            pstm.setString(1, account.getLogin());
+            pstm.setString(2, account.getPassword());
+            pstm.setLong(3, account.getRoleId());
+            pstm.setLong(4, account.getUserStatuses());
+            pstm.setLong(5, account.getId());
+            pstm.executeUpdate();
+            //   con.commit();
+            log.trace("Update done");
+        } catch (SQLException e) {
+            log.error(e);
+        }
+        return Optional.of(account);
+    }
+
+    @Override
+    public Account updateAccountDetailId(Account account) {
+        Connection con;
+        PreparedStatement pstm;
+        log.error("Username: " + account.getLogin() + " AccountDetailId: " + account.getAccountDetailId());
+        try {
+            con = DBManager.getConnection();
+            pstm = con.prepareStatement(DbConst.UPDATE_ACCOUNT_AC_DETAIL_ID);
+            pstm.setLong(1, account.getAccountDetailId());
+            pstm.setLong(2, account.getId());
+            pstm.executeUpdate();
+            log.trace("Update done");
+        } catch (SQLException e) {
+            log.error(e);
+        }
+        return account;
     }
 
     /**
@@ -122,10 +174,11 @@ public class AccountDAOImpl implements AccountDAO {
                 account.setId(rs.getLong(Fields.ACCOUNT__ID));
                 account.setLogin(rs.getString(Fields.ACCOUNT__LOGIN));
                 account.setPassword(rs.getString(Fields.ACCOUNT__PASSWORD));
-                account.setRoleId(rs.getInt(Fields.ROLE_ID));
-                account.setAccountDetailId(new AccountDetailDAOImpl().getAccountDetailById(account.getId()).getId());
+                account.setRoleId(rs.getInt(Fields.ROLE__ID));
+                account.setUserStatuses(rs.getInt(Fields.ACCOUNT__USER_STATUSES));
+                account.setAccountDetailId(rs.getInt(Fields.ACCOUNT__DETAIL_ID));
                 return account;
-            } catch (SQLException | DaoException e) {
+            } catch (SQLException e) {
                 log.error(e.getMessage());
                 return null;
             }

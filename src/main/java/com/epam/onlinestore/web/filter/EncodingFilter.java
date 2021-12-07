@@ -1,51 +1,27 @@
 package com.epam.onlinestore.web.filter;
 
-import org.apache.log4j.Logger;
-
 import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-/**
- * Encoding filter.
- *
- * @author D.Kolesnikov
- */
 public class EncodingFilter implements Filter {
-
-    private static final Logger log = Logger.getLogger(EncodingFilter.class);
 
     private String encoding;
 
-    public void destroy() {
-        log.debug("Filter destruction starts");
-        // do nothing
-        log.debug("Filter destruction finished");
+    public void init(FilterConfig config) throws ServletException {
+        encoding = config.getInitParameter("requestEncoding");
+
+        if(encoding==null) encoding="cp1251";
     }
 
-    public void doFilter(ServletRequest request, ServletResponse response,
-                         FilterChain chain) throws IOException, ServletException {
-
-        log.debug("Filter starts");
-
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        log.trace("Request uri --> " + httpRequest.getRequestURI());
-
-        String requestEncoding = request.getCharacterEncoding();
-        if (requestEncoding == null) {
-            log.trace("Request encoding = null, set encoding --> " + encoding);
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain next)
+            throws IOException {
+        try {
             request.setCharacterEncoding(encoding);
+            next.doFilter(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
         }
-
-        log.debug("Filter finished");
-        chain.doFilter(request, response);
     }
 
-    public void init(FilterConfig fConfig) throws ServletException {
-        log.debug("Filter initialization starts");
-        encoding = fConfig.getInitParameter("encoding");
-        log.trace("Encoding from web.xml --> " + encoding);
-        log.debug("Filter initialization finished");
-    }
-
+    public void destroy(){}
 }
