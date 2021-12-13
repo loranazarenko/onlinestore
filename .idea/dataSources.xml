@@ -12,11 +12,5 @@
         <property name="characterSetResults" value="cp1251" />
       </driver-properties>
     </data-source>
-    <data-source source="LOCAL" name="User Data Source" uuid="f1a6aa34-5915-4f25-bb6b-448a2450488f">
-      <synchronize>true</synchronize>
-      <configured-by-url>true</configured-by-url>
-      <jdbc-driver>java.sql.Driver</jdbc-driver>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
   </component>
 </project>
