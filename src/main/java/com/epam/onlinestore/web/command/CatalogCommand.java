@@ -44,9 +44,9 @@ public class CatalogCommand extends Command {
 
         List<Product> listOfProducts = productService.findAllLangSortBy(language, (currentPage - 1) * recordsPerPage, recordsPerPage, sort);
         int rows = productService.getNumberOfRows();
-        int noOfPages = rows / recordsPerPage;
+        int noOfPages = rows/recordsPerPage;
 
-        if (noOfPages % recordsPerPage > 0) {
+        if (rows%recordsPerPage > 0) { //noOfPages
             noOfPages++;
         }
 

@@ -1,4 +1,4 @@
-<%@ page language="java" %>
+<%@ page %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
@@ -27,8 +27,6 @@
                                 <th scope="col">Description</th>
                                 <th scope="col">Total</th>
                                 <th scope="col">Status</th>
-                                    <%--       <th scope="col">Pay</th>
-                                           <th scope="col">Cancel</th> --%>
                             </tr>
                             </thead>
                             <c:set var="k" value="0"/>
@@ -48,17 +46,7 @@
                                     <c:if test="${userOrder.value == 'canceled'}">
                                         <td class="text-danger"><c:out value="${userOrder.value}"/></td>
                                     </c:if>
-                                        <%--      <td>
-                                                  <a class="btn btn-outline-dark mt-auto"
-                                                     href="${pageContext.request.contextPath}/controller?command=userOrders&receiptId=${userOrder.key.id}&status=paid">
-                                                      Pay receipt </a>
-                                              </td>
-                                              <td>
-                                                  <a class="btn btn-outline-dark mt-auto"
-                                                     href="${pageContext.request.contextPath}/controller?command=userOrders&receiptId=${userOrder.key.id}&status=canceled">
-                                                      Cancel receipt </a>
-                                              </td>  --%>
-                                </tr>
+                                 </tr>
                             </c:forEach>
                         </table>
                     </c:if>
@@ -66,6 +54,12 @@
             </div>
             <a class="btn btn-outline-dark mt-auto" href="user.jsp"> Return to user page </a>
             <a class="btn btn-outline-dark mt-auto" href="index.jsp"> Return to enter </a>
+            <br>
+            <form action="controller" method="get">
+                <input type="hidden" name="command" value="catalog">
+                <button type="submit" value="catalog">Catalog of products</button>
+            </form>
+            <br>
         </td>
     </tr>
 </table>

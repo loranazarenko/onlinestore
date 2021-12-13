@@ -49,53 +49,5 @@ public class Controller extends HttpServlet {
         resp.sendRedirect(resp.encodeRedirectURL(path));
     }
 
-   /* protected void doGet(HttpServletRequest request,
-                         HttpServletResponse response) throws ServletException, IOException {
-        try {
-            process(request, response);
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-    }
-
-    protected void doPost(HttpServletRequest request,
-                          HttpServletResponse response) throws ServletException, IOException {
-        try {
-            process(request, response);
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private void process(HttpServletRequest request,
-                         HttpServletResponse response) throws IOException, ServletException, DaoException {
-
-      /*   log.debug("Controller starts");
-
-        // extract command name from the request
-        String commandName = request.getParameter("command");
-        log.trace("Request parameter: command --> " + commandName);
-
-        // obtain command object by its name
-        Command command = CommandContainer.getCommand(commandName);
-        log.trace("Obtained command --> " + command);
-
-        // execute command and get forward address
-        String forward = "/error_page.jsp";
-        forward = command.execute(request, response);
-        log.trace("Forward address --> " + forward);
-
-        log.debug("Controller finished, now go to forward address --> " + forward);
-
-        // if the forward address is not null go to the address
-       // if (forward != null) {
-            RequestDispatcher disp = request.getRequestDispatcher(forward);
-        //  disp.forward(request, response);
-         response.sendRedirect(forward);
-      //  }
-    }
-            */
-
 
 }

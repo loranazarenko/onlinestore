@@ -96,7 +96,6 @@
                 </li>
             </ul>
 
-
             <div style="margin-right: auto;margin-left: auto" class="text-center text-black">
                 Account: ${sessionScope.user.login}</div>
 
@@ -231,7 +230,6 @@
         </c:if>
     </div>
 </section>
-
 
 <footer class="py-5 bg-dark">
     <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Larisa Website 2021</p></div>

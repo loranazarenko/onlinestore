@@ -39,6 +39,10 @@ public class ReceiptService {
         return receiptDAO.findByUser(userId);
     }
 
+    public List<Product> getReceiptProductsWithAmount(long receiptId) {
+        return receiptLineDAO.getReceiptProductsWithAmount(receiptId);
+    }
+
     public void removeReceiptById(long orderId) throws SQLException {
         receiptDAO.removeReceiptById(orderId);
     }

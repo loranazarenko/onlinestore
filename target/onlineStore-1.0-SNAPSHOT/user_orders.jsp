@@ -66,6 +66,12 @@
             </div>
             <a class="btn btn-outline-dark mt-auto" href="user.jsp"> Return to user page </a>
             <a class="btn btn-outline-dark mt-auto" href="index.jsp"> Return to enter </a>
+            <br>
+            <form action="controller" method="get">
+                <input type="hidden" name="command" value="catalog">
+                <button type="submit" value="catalog">Catalog of products</button>
+            </form>
+            <br>
         </td>
     </tr>
 </table>

@@ -31,11 +31,14 @@ public class MakeReceiptCommand extends Command {
             return Path.PAGE__SIGNUP;
         }
         session.removeAttribute("userCartProductList");
-
+        session.removeAttribute("temp");
         Map<Product, Integer> userCart = new LinkedHashMap<>();
         if (session.getAttribute("cart") != null) {
             userCart = (Map<Product, Integer>) session.getAttribute("cart");
         }
+        Map<Product, Integer> userOrder = new LinkedHashMap<>(userCart);
+        userCart.clear();
+        session.removeAttribute("cart");
 
         double totalPrice = (double) session.getAttribute("totalPrice");
         Receipt receipt = new Receipt();
@@ -43,9 +46,11 @@ public class MakeReceiptCommand extends Command {
         receipt.setTotal(totalPrice);
         receipt.setDescription("New Receipt  " + receipt.getId());
         logger.error("Order: " + receipt);
-        receiptService.addReceipt(receipt, userCart, "registered");
+        receiptService.addReceipt(receipt, userOrder, "registered");
         session.setAttribute("order", receipt);
-        session.setAttribute("orderItems", userCart);
+        session.setAttribute("orderItems", userOrder);
+
+        session.setAttribute("currentCount", 0);
 
         return Path.PAGE_ORDER;
     }

@@ -19,7 +19,6 @@ import java.util.List;
 public class ReceiptDAOImpl implements ReceiptDAO {
     private static final Logger logger = Logger.getLogger(ReceiptDAOImpl.class);
 
-
     @Override
     public List<Receipt> findByUser(long userId) throws DaoException {
         List<Receipt> entities = new ArrayList<>();

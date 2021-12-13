@@ -10,7 +10,7 @@ public interface ReceiptLineDAO {
 
     void setProductsForReceipt(Receipt receipt, Map<Integer, Product> map);
 
-    List<Product> getReceiptProductsWithAmount(Receipt receipt);
+    List<Product> getReceiptProductsWithAmount(long receiptId);
 
     void insertReceiptWithLine(long receiptId, Map<Product, Integer> mapProductsWithCount);
 

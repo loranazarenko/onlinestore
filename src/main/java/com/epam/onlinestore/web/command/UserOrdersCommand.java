@@ -3,9 +3,10 @@ package com.epam.onlinestore.web.command;
 import com.epam.onlinestore.Path;
 import com.epam.onlinestore.dao.impl.StatusDAOImpl;
 import com.epam.onlinestore.entity.Account;
+import com.epam.onlinestore.entity.Product;
 import com.epam.onlinestore.entity.Receipt;
 import com.epam.onlinestore.exception.DaoException;
-import com.epam.onlinestore.service.CartService;
+import com.epam.onlinestore.service.ProductService;
 import com.epam.onlinestore.service.ReceiptService;
 import org.apache.log4j.Logger;
 
@@ -23,7 +24,7 @@ public class UserOrdersCommand extends Command {
 
     private static final Logger logger = Logger.getLogger(UserOrdersCommand.class);
     private static final ReceiptService receiptService = new ReceiptService();
-    private static final CartService cartService = new CartService();
+    ProductService productService = new ProductService();
     StatusDAOImpl statusDAO = new StatusDAOImpl();
 
     @Override
@@ -45,6 +46,14 @@ public class UserOrdersCommand extends Command {
             status = request.getParameter("status");
         }
 
+        List<Product> productList = receiptService.getReceiptProductsWithAmount(receiptId);
+        for (Product product : productList) {
+            if (status.equals("canceled")) {
+                product.setCount(product.getCount() + 1);
+                productService.updateProduct(product);
+            }
+        }
+
         ReceiptService receiptService = new ReceiptService();
         if (receiptId != -1) {
             long statusId = statusDAO.getStatusIdByName(status);
@@ -53,7 +62,7 @@ public class UserOrdersCommand extends Command {
 
         List<Receipt> receipts = receiptService.getReceiptsByUser(userId);
         Map<Receipt, String> receiptsStatuses = new LinkedHashMap<>();
-        for(Receipt rec: receipts) {
+        for (Receipt rec : receipts) {
             String statusDao = statusDAO.getStatusNameById((int) rec.getStatusId());
             receiptsStatuses.put(rec, statusDao);
         }
